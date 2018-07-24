@@ -39,7 +39,6 @@ export const formSubmit = (formValues) => {
     dispatch(formSubmitRequest(formValues));
 
     // should add some authorization token here
-    console.log('about to post to', `${process.env.REACT_APP_API_URL}/feeding`);
     axios.post(`${process.env.REACT_APP_API_URL}/feeding`, formValues)
       .then((response) => {
         const data = response.data;
