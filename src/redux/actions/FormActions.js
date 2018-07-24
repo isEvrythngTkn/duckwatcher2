@@ -6,6 +6,10 @@ import {
   FORM_RESET
 } from '../../constants/ActionTypes';
 
+// should probably put this in some other file, but later
+const API_URL = process.env.NODE_ENV === 'production' ?
+  'https://duck-watcher-api.herokuapp.com' : 'http://localhost:3001';
+
 export function formSubmitRequest(values) {
   return {
     type: FORM_SUBMIT,
@@ -35,12 +39,12 @@ export function formReset() {
 }
 
 export const formSubmit = (formValues) => {
-  console.log('here we are', process.env.API_URL);
   return (dispatch) => {
     dispatch(formSubmitRequest(formValues));
-    // console.log('about to post', formValues);
+
     // should add some authorization token here
-    axios.post(`${process.env.API_URL}/feeding`, formValues)
+    console.log('about to post to', `${API_URL}/feeding`);
+    axios.post(`${API_URL}/feeding`, formValues)
       .then((response) => {
         const data = response.data;
         if (data.error) {
@@ -51,6 +55,7 @@ export const formSubmit = (formValues) => {
       })
       .catch((error) => {
         // need to convert this error into a string
+        console.log('dis a bad error', error);
         dispatch(formSubmitFailure(error))
       });
   };
